@@ -26,7 +26,29 @@ public class Main {
         List<City> sortDistrictNameLambda = sortDistrictNameLambda(cities);
         print(sortDistrictNameLambda);
 
+        //нахождение преобразование списка в массив и индекса и зачение макс кол-ва жителей
+        City[] arrCities = convert(cities);
+        Pair max = max(arrCities);
+        System.out.println("[" + max.getValue1() + "] = " + max.getValue2());
 
+
+    }
+
+    //нахождение преобразование списка в массив
+    public static City[] convert(List<City> cities) {
+        return cities.toArray(new City[0]);
+    }
+
+    //нахождение индекса и зачение макс кол-ва жителей
+    public static Pair max(City[] arr) {
+        Pair max = new Pair();
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i].getPopulation() > max.getValue2()) {
+                max.setValue1(i);
+                max.setValue2(arr[i].getPopulation());
+            }
+        }
+        return max;
     }
 
     // Comparator: сортировка по наименованию городов без учёта регистра
@@ -39,6 +61,7 @@ public class Main {
         }).toList();
 
     }
+
     // Lambda:  сортировка по наименованию городов без учёт регистров
     public static List<City> sortNameLambda(List<City> cities) {
         return cities.stream().sorted((City o1, City o2) -> o1.getName().compareToIgnoreCase(o2.getName())).toList();
@@ -51,7 +74,7 @@ public class Main {
     }
 
     // Lambda: сортировка по федеральному округу и наименованию города внутри каждого федерального округа с учётом регитсра
-    public static List<City> sortDistrictNameLambda(List<City> cities){
+    public static List<City> sortDistrictNameLambda(List<City> cities) {
         return cities.stream().sorted((o1, o2) -> {
             int result = o1.getDistrict().compareTo(o2.getDistrict());
             if (result == 0)
