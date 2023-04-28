@@ -3,6 +3,7 @@ package org.example;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class Main {
@@ -28,10 +29,26 @@ public class Main {
 
         //нахождение преобразование списка в массив и индекса и зачение макс кол-ва жителей
         City[] arrCities = convert(cities);
-        Pair max = max(arrCities);
+        Pair<Integer, Integer> max = max(arrCities);
         System.out.println("[" + max.getValue1() + "] = " + max.getValue2());
 
+        //определение городов в каждом регионе
+        List<Pair<String, Integer>> find = number_of_cities_in_the_region(cities);
+        for (Pair<String,Integer> ob:
+             find) {
+            System.out.println(ob.getValue1()+" - " + ob.getValue2());
+            
+        }
 
+
+    }
+
+    // определение городов в каждой области
+    public static List<Pair<String, Integer>> number_of_cities_in_the_region(List<City> cities) {
+        List<Pair<String, Integer>> find = new ArrayList<>();
+        cities.stream().collect(Collectors.groupingBy(City::getRegion, Collectors.counting())).forEach((s, count)
+                -> find.add(new Pair<>(s, Math.toIntExact(count))));
+        return find;
     }
 
     //нахождение преобразование списка в массив
@@ -40,8 +57,8 @@ public class Main {
     }
 
     //нахождение индекса и зачение макс кол-ва жителей
-    public static Pair max(City[] arr) {
-        Pair max = new Pair();
+    public static Pair<Integer, Integer> max(City[] arr) {
+        Pair<Integer, Integer> max = new Pair<>(0, 0);
         for (int i = 0; i < arr.length; i++) {
             if (arr[i].getPopulation() > max.getValue2()) {
                 max.setValue1(i);
